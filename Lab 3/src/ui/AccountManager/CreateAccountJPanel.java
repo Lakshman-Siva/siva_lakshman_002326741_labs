@@ -7,17 +7,25 @@ package ui.AccountManager;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import model.Account;
+import model.AccountDirectory;
 
 /**
  *
  * @author Lakshman
  */
 public class CreateAccountJPanel extends javax.swing.JPanel {
+
+	public JPanel userProcessContainer;
+	public AccountDirectory accountDirectory;
+	
 	/**
 	 * Creates new form CreateAccountJPanel
 	 */
-	public CreateAccountJPanel() {
+	public CreateAccountJPanel(JPanel container, AccountDirectory accDir) {
 		initComponents();
+		userProcessContainer = container;
+		accountDirectory = accDir;
 	}
 
 	/**
@@ -130,10 +138,42 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
 	// TODO add your handling code here:
+	userProcessContainer.remove(this);
+	CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+	layout.previous(userProcessContainer);
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void createAccBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createAccBtnActionPerformed
 	// TODO add your handling code here:
+	int bal;
+	String routeNumber = routingNumber.getText();
+	String accNumber = accountNumber.getText();
+	String bName = bankName.getText();
+	
+	if(routeNumber.isBlank() || accNumber.isBlank() || bName.isBlank()) {
+		JOptionPane.showMessageDialog(this, "All fields are mandatory", "Field Validation",  JOptionPane.ERROR_MESSAGE);
+		return;
+	}
+	
+	try {
+		bal = Integer.parseInt(balance.getText());
+	} catch (Exception e) {
+		JOptionPane.showMessageDialog(null, "Please check the balance input", "Warning", JOptionPane.WARNING_MESSAGE);
+		return;
+	}
+	
+	Account acc = accountDirectory.addAccount();
+	acc.setAccountNumber(accNumber);
+	acc.setBalance(bal);
+	acc.setBankName(bName);
+	acc.setRoutingNumber(routeNumber);
+	
+	JOptionPane.showMessageDialog(this, "Account successfully created", "Information",  JOptionPane.INFORMATION_MESSAGE);
+	
+	routingNumber.setText("");
+	accountNumber.setText("");
+	bankName.setText("");
+	balance.setText("");
     }//GEN-LAST:event_createAccBtnActionPerformed
 
 
