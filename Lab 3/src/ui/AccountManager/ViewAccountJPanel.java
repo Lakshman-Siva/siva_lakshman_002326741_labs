@@ -8,18 +8,54 @@ import java.awt.CardLayout;
 import java.awt.Component;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import model.Account;
+import model.AccountDirectory;
 
 /**
  *
  * @author Lakshman
  */
 public class ViewAccountJPanel extends javax.swing.JPanel {
+
+	public JPanel userProcessContainer;
+	public AccountDirectory accountDirectory;
+	public Account account;
 	
 	/**
 	 * Creates new form ViewAccountJPanel
 	 */
-	public ViewAccountJPanel() {
+	public ViewAccountJPanel(JPanel container, AccountDirectory accDir, Account acc) {
 		initComponents();
+		userProcessContainer = container;
+		accountDirectory = accDir;
+		account = acc;
+		
+		setTextFields();
+		setReadOnlyMode();
+	}
+	
+	public void setTextFields() {
+		accountNumber.setText(account.getAccountNumber());
+		routingNumber.setText(account.getRoutingNumber());
+		bankName.setText(account.getBankName());
+	}
+	
+	public void setReadOnlyMode() {
+		accountNumber.setEnabled(false);
+		routingNumber.setEnabled(false);
+		bankName.setEnabled(false);
+		
+		saveBtn.setEnabled(false);
+		updateBtn.setEnabled(true);
+	}
+	
+	public void setEditMode() {
+		accountNumber.setEnabled(true);
+		routingNumber.setEnabled(true);
+		bankName.setEnabled(true);
+
+		saveBtn.setEnabled(true);
+		updateBtn.setEnabled(false);
 	}
 
 	/**
@@ -136,14 +172,40 @@ public class ViewAccountJPanel extends javax.swing.JPanel {
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
 	// TODO add your handling code here:
+	userProcessContainer.remove(this);
+	
+	Component[] panelStack = userProcessContainer.getComponents();
+	JPanel lastPanel = (JPanel) panelStack[panelStack.length - 1];
+	ManageAccountsJPanel manageAccountsJPanel = (ManageAccountsJPanel) lastPanel;
+	manageAccountsJPanel.populateTable();
+	
+	CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+	layout.previous(userProcessContainer);
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
 	// TODO add your handling code here:
+	setEditMode();
     }//GEN-LAST:event_updateBtnActionPerformed
 
     private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
 	// TODO add your handling code here:
+	String routeNumber = routingNumber.getText();
+	String accNumber = accountNumber.getText();
+	String bName = bankName.getText();
+	
+	if(routeNumber.isBlank() || accNumber.isBlank() || bName.isBlank()) {
+		JOptionPane.showMessageDialog(this, "All fields are mandatory", "Field Validation",  JOptionPane.ERROR_MESSAGE);
+		return;
+	}
+	
+	account.setAccountNumber(accNumber);
+	account.setRoutingNumber(routeNumber);
+	account.setBankName(bName);
+	
+	JOptionPane.showMessageDialog(this, "Account successfully updated", "Information",  JOptionPane.INFORMATION_MESSAGE);
+	
+	setReadOnlyMode();
     }//GEN-LAST:event_saveBtnActionPerformed
 
 
