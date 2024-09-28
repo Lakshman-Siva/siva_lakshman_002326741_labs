@@ -8,18 +8,42 @@ import java.awt.CardLayout;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+import model.Account;
+import model.AccountDirectory;
 
 /**
  *
  * @author Lakshman
  */
 public class ManageAccountsJPanel extends javax.swing.JPanel {
+
+	public JPanel userProcessContainer;
+	public AccountDirectory accountDirectory;
 	
 	/**
 	 * Creates new form ManageAccountsJPanel
 	 */
-	public ManageAccountsJPanel() {
+	public ManageAccountsJPanel(JPanel container, AccountDirectory accDir) {
 		initComponents();
+		userProcessContainer = container;
+		accountDirectory = accDir;
+		
+		populateTable();
+	}
+	
+	public void populateTable() {
+		DefaultTableModel model = (DefaultTableModel) accountsTable.getModel();
+		model.setRowCount(0);
+		
+		for(Account acc : accountDirectory.getAccounts()) {
+			Object[] row = new Object[4];
+			row[0] = acc;
+			row[1] = acc.getRoutingNumber();
+			row[2] = acc.getAccountNumber();
+			row[3] = acc.getBalance();
+			
+			model.addRow(row);
+		}
 	}
 
 	/**
@@ -136,6 +160,9 @@ public class ManageAccountsJPanel extends javax.swing.JPanel {
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
 	// TODO add your handling code here:
+	userProcessContainer.remove(this);
+	CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+	layout.previous(userProcessContainer);
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
