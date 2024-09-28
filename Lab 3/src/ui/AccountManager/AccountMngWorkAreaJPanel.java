@@ -13,12 +13,18 @@ import model.AccountDirectory;
  * @author Lakshman
  */
 public class AccountMngWorkAreaJPanel extends javax.swing.JPanel {
+	
+	public JPanel userProcessContainer;
+	public AccountDirectory accountDirectory;
 
 	/**
 	 * Creates new form AccountMngWorkAreaJPanel
 	 */
-	public AccountMngWorkAreaJPanel() {
+	public AccountMngWorkAreaJPanel(JPanel container, AccountDirectory accDir) {
 		initComponents();
+		userProcessContainer = container;
+		accountDirectory = accDir;
+		
 	}
 
 	/**
@@ -72,10 +78,21 @@ public class AccountMngWorkAreaJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void createBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBtnActionPerformed
+	// TODO add your handling code here:
+	CreateAccountJPanel panel = new CreateAccountJPanel(userProcessContainer, accountDirectory);
+	userProcessContainer.add("AccountMngWorkAreaJPanel",  panel);
+	
+	CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+	layout.next(userProcessContainer);
     }//GEN-LAST:event_createBtnActionPerformed
 
     private void manageBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageBtnActionPerformed
-
+	// TODO add your handling code here:
+	ManageAccountsJPanel panel = new ManageAccountsJPanel(userProcessContainer, accountDirectory);
+	userProcessContainer.add("AccountMngWorkAreaJPanel",  panel);
+	
+	CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+	layout.next(userProcessContainer);
     }//GEN-LAST:event_manageBtnActionPerformed
 
 
