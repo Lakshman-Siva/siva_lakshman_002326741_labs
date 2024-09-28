@@ -140,10 +140,60 @@ public class ManageAccountsJPanel extends javax.swing.JPanel {
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
 	// TODO add your handling code here:
+	int selectedRow = accountsTable.getSelectedRow();
+	
+	if(selectedRow < 0) {
+		JOptionPane.showMessageDialog(null,  "Please select an account from the list",  "Warning",  JOptionPane.WARNING_MESSAGE);
+		return;
+	}
+	
+	int dialogResult = JOptionPane.showConfirmDialog(null,  "Are you sure wante to delete the selected account?",  "Warning", JOptionPane.YES_NO_OPTION);
+	if(dialogResult == JOptionPane.YES_OPTION) {
+		Account selectedAccount = (Account) accountsTable.getValueAt(selectedRow,  0);
+		accountDirectory.deleteAccount(selectedAccount);
+		populateTable();
+	}
     }//GEN-LAST:event_deleteBtnActionPerformed
 
     private void viewBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewBtnActionPerformed
 	// TODO add your handling code here:
+	int selectedRow = accountsTable.getSelectedRow();
+	
+	if(selectedRow < 0) {
+		JOptionPane.showMessageDialog(null,  "Please select an account from the list",  "Warning",  JOptionPane.WARNING_MESSAGE);
+		return;
+	}
+	
+	Account selectedAccount = (Account) accountsTable.getValueAt(selectedRow,  0);
+	
+	ViewAccountJPanel panel = new ViewAccountJPanel(userProcessContainer, accountDirectory, selectedAccount);
+	userProcessContainer.add("ViewAccountJPanel", panel);
+	
+	CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+	layout.next(userProcessContainer);
+    }//GEN-LAST:event_viewBtnActionPerformed
+
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
+	// TODO add your handling code here:
+	String searchText = searchBox.getText();
+	
+	if(searchText.isBlank()) {
+		JOptionPane.showMessageDialog(null,  "Please type the account number to view",  "Warning", JOptionPane.WARNING_MESSAGE);
+		return;
+	}
+	
+	Account account = accountDirectory.searchAccount(searchText);
+	if(account == null) {
+		JOptionPane.showMessageDialog(null,  "Account not found. Please check the account number and try again.",  "Warning", JOptionPane.WARNING_MESSAGE);
+		return;
+	}
+	
+	ViewAccountJPanel panel = new ViewAccountJPanel(userProcessContainer, accountDirectory, account);
+	userProcessContainer.add("ViewAccountJPanel", panel);
+	CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+	layout.next(userProcessContainer);
+	
+	searchBox.setText("");
     }//GEN-LAST:event_searchBtnActionPerformed
 
 
