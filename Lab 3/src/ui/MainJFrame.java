@@ -6,6 +6,8 @@ package ui;
 
 import java.awt.CardLayout;
 import model.Account;
+import model.AccountDirectory;
+import ui.AccountManager.AccountMngWorkAreaJPanel;
 
 /**
  *
@@ -13,14 +15,30 @@ import model.Account;
  */
 public class MainJFrame extends javax.swing.JFrame {
 	
+	private AccountDirectory accountDirectory;
+
 	/**
 	 * Creates new form MainJFrame
 	 */
 	public MainJFrame() {
 		initComponents();
 		this.accountDirectory = new AccountDirectory();
+		generateDemoData();
 	}
 	
+	private void generateDemoData() {
+		Account newAcc = accountDirectory.addAccount();
+		newAcc.setAccountNumber("11111111111");
+		newAcc.setRoutingNumber("1111222222");
+		newAcc.setBankName("BofA");
+		newAcc.setBalance(2000);
+		
+		Account newAcc1 = accountDirectory.addAccount();
+		newAcc1.setAccountNumber("22222222222");
+		newAcc1.setRoutingNumber("33333344444");
+		newAcc1.setBankName("Chase");
+		newAcc1.setBalance(500);
+	}
 
 	/**
 	 * This method is called from within the constructor to initialize the form.
