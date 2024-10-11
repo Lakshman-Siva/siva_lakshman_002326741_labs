@@ -35,8 +35,8 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="cmbSuppliers" min="-2" pref="134" max="-2" attributes="0"/>
-                  <Component id="btnLogin" min="-2" max="-2" attributes="0"/>
                   <Component id="cmbRoles" min="-2" pref="134" max="-2" attributes="0"/>
+                  <Component id="btnLogin" alignment="0" min="-2" pref="84" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>

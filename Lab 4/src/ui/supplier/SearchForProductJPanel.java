@@ -8,6 +8,7 @@ package ui.supplier;
 import model.Product;
 import model.Supplier;
 import java.awt.CardLayout;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 
@@ -103,7 +104,23 @@ public class SearchForProductJPanel extends javax.swing.JPanel {
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         // TODO add your handling code here:
-        
+        int id;
+	try {
+		id = Integer.parseInt(idField.getText());
+		Product product = supplier.getProductCatalog().searchProduct(id);
+		if(product == null) {
+			JOptionPane.showMessageDialog(this, "No such product found, please try again!", "Info", JOptionPane.INFORMATION_MESSAGE);
+			return;
+		}
+		ViewProductDetailJPanel panel = new ViewProductDetailJPanel(workArea, product);
+		workArea.add("ViewProductDetailJPanel", panel);
+		CardLayout layout = (CardLayout) workArea.getLayout();
+		layout.next(workArea);
+		
+		
+	} catch(Exception ex) {
+		JOptionPane.showMessageDialog(this, "Enter a valid product ID!", "Warning", JOptionPane.WARNING_MESSAGE);
+	}
         
 }//GEN-LAST:event_searchButtonActionPerformed
 

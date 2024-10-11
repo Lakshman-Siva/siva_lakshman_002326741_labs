@@ -99,8 +99,8 @@ public class LoginScreen extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cmbSuppliers, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLogin)
-                    .addComponent(cmbRoles, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbRoles, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -128,13 +128,26 @@ public class LoginScreen extends javax.swing.JPanel {
     private void cmbSuppliersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSuppliersActionPerformed
         // TODO add your handling code here:
         
-        
-        
+	if(cmbSuppliers.getSelectedItem() == null) return;
+	selectedSupplier = (Supplier) cmbSuppliers.getSelectedItem();
     }//GEN-LAST:event_cmbSuppliersActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
-        
+	JPanel selectedPanel = (JPanel) cmbRoles.getSelectedItem();
+	
+	if(selectedPanel.getClass() == SupplierWorkAreaJPanel.class) {
+		if(selectedSupplier == null) {
+			JOptionPane.showMessageDialog(this, "Please select a supplier to login under supplier role", "Warning", JOptionPane.WARNING_MESSAGE);
+			return;
+		} else {
+			selectedPanel = new SupplierWorkAreaJPanel(mainWorkArea, selectedSupplier);
+		}
+	}
+	
+	mainWorkArea.add("WorkAreaJPanel", selectedPanel);
+	CardLayout layout = (CardLayout) mainWorkArea.getLayout();
+	layout.next(mainWorkArea);
         
         
     }//GEN-LAST:event_btnLoginActionPerformed
@@ -155,19 +168,36 @@ public class LoginScreen extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void populateRoleCombo() {
-        
-      
+	cmbRoles.removeAllItems();
+	
+	AdminWorkAreaJPanel adminPanel = new AdminWorkAreaJPanel(mainWorkArea, supplierDirectory);
+	SupplierWorkAreaJPanel supplierPanel = new SupplierWorkAreaJPanel(mainWorkArea, selectedSupplier);
 
+	cmbRoles.addItem(adminPanel);
+	cmbRoles.addItem(supplierPanel);
     }
 
     public void populateSupplierCombo() {
-       
-     
-       
+	cmbSuppliers.removeAllItems();
+	
+	for(Supplier supplier : supplierDirectory.getSupplierList()) {
+		cmbSuppliers.addItem(supplier);
+	}
     }
 
     private void updateSupplierVisibility() {
-        
+
+	if((cmbRoles.getSelectedItem() == null) || (cmbRoles.getSelectedItem().getClass() == AdminWorkAreaJPanel.class)) {
+		selectedSupplier = null;
+		lblSupplier.setVisible(false);
+		cmbSuppliers.setVisible(false);
+		return;
+	}
+	
+	if(cmbRoles.getSelectedItem().getClass() == SupplierWorkAreaJPanel.class) {
+		lblSupplier.setVisible(true);
+		cmbSuppliers.setVisible(true);
+	}
         
          //To change body of generated methods, choose Tools | Templates.
     }
