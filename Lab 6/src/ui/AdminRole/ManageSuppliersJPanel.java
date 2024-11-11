@@ -29,8 +29,9 @@ public class ManageSuppliersJPanel extends javax.swing.JPanel {
             model.removeRow(i);
         }
         for (Supplier s : supplierDirectory.getSupplierlist()) {
-            Object row[] = new Object[1];
+            Object row[] = new Object[2];
             row[0] = s;
+	row[1] = s.getProductCatalog().getProductcatalog().size();
             model.addRow(row);
         }
     }
